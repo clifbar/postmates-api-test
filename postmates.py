@@ -54,6 +54,10 @@ def delivery():
         return redirect(url_for('order'))
 
 
+def parse_isodate(timestamp):
+    tz = pytz.timezone('US/Pacific')
+    return iso8601.parse_date(timestamp).astimezone(tz)
+
 @app.template_filter('currency')
 def currency(value):
     value = float(value)/100
@@ -61,15 +65,14 @@ def currency(value):
 
 @app.template_filter('format_datetime')
 def format_datetime(value):
-    tz = pytz.timezone('US/Pacific')
-    return iso8601.parse_date(value).astimezone(tz).strftime('%m/%d/%y @ %I:%M %p')
-
+    # tz = pytz.timezone('US/Pacific')
+    return parse_isodate(value).strftime('%m/%d/%y @ %I:%M %p')
 
 @app.context_processor
 def utility_processor():
     def time_from_now(value):
         now = datetime.datetime.now()
-        tz = pytz.timezone('US/Pacific')
-        timedelta = iso8601.parse_date(value).astimezone(tz).replace(tzinfo=None) - now
+        # tz = pytz.timezone('US/Pacific')
+        timedelta = parse_isodate(value).replace(tzinfo=None) - now
         return  '%s minutes from now' % int(timedelta.total_seconds() / 60)
     return dict(time_from_now=time_from_now)

@@ -4,31 +4,30 @@
 
 {% block content %}
   <h1>Your order details</h1>
-  
-  <h2>Order</h2>
-  {% for content in order.contents %}
-    <div>{{content.name}} x {{content.quantity}}</div>
-  {% endfor %}
-  
+  <div>{{order.uuid}}</div>
+
   <h2>Pickup</h2>
   <div>{{order.pickup.name}}</div>
   <div>{{order.pickup.address}}</div>
   <div>{{order.pickup.phone_number}}</div>
-  
   
   <h2>Dropoff</h2>
   <div>{{order.dropoff.name}}</div>
   <div>{{order.dropoff.address}}</div>
   <div>{{order.dropoff.phone_number}}</div>
   
-  
-  <h2>Est. Delivery</h2>
+  <h2>Order</h2>
+  {% for content in order.contents %}
+    <div>{{content.name}} x {{content.quantity}}</div>
+  {% endfor %}
 
+
+  <h2>Est. Delivery</h2>
   <div>Fee: {{quote.fee|currency}}</div>
   <div>Est. Delivery Time: {{quote.dropoff_eta|format_datetime}} <span>({{time_from_now(quote.dropoff_eta)}})</span></div>
   <div></div>
 
   <div>Courier will arrive in: {{quote.pickup_duration}} minutes</div>
   <br>
-  <a href="/delivery" class="pure-button">Looks good? Deliver it!</a>
+  <a href="/delivery" class="button-gray">Looks good? Deliver it!</a>
 {% endblock %}
